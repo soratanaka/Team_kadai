@@ -246,6 +246,7 @@ ja:
       team_members: 'チームメンバーの一覧'
       team_members2: 'チームメンバー'
       edit_team: 'チームを編集する'
+      not_edit_team: 'チームを編集できません'
       invite_team_member: 'チームメンバー招待'
       team_leader: 'チームリーダー'
       leader: 'リーダー'
