@@ -16,9 +16,15 @@ class AssignsController < ApplicationController
 
   def destroy
     assign = Assign.find(params[:id])
-    destroy_message = assign_destroy(assign, assign.user)
-
-    redirect_to team_url(params[:team_id]), notice: destroy_message
+    if assign.user == assign.team.owner
+      destroy_message = assign_destroy(assign, assign.user)
+      redirect_to team_url(params[:team_id]), notice: destroy_message
+    elsif assign.user == current_user
+      destroy_message = assign_destroy(assign, assign.user)
+      redirect_to team_url(params[:team_id]), notice: destroy_message
+    else
+      redirect_to team_url(params[:team_id]), notice: "権限がありません"
+  end
   end
 
   private
@@ -27,11 +33,11 @@ class AssignsController < ApplicationController
   end
 
   def assign_destroy(assign, assigned_user)
-    if assigned_user == assign.team.owner
-      I18n.t('views.messages.cannot_delete_the_leader')
-    elsif Assign.where(user_id: assigned_user.id).count == 1
-      I18n.t('views.messages.cannot_delete_only_a_member')
-    elsif assign.destroy
+      if assigned_user == assign.team.owner
+        I18n.t('views.messages.cannot_delete_the_leader')
+      elsif Assign.where(user_id: assigned_user.id).count == 1
+        I18n.t('views.messages.cannot_delete_only_a_member')
+      elsif assign.destroy
       set_next_team(assign, assigned_user)
       I18n.t('views.messages.delete_member')
     else
