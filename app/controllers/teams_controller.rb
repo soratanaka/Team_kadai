@@ -51,6 +51,7 @@ class TeamsController < ApplicationController
   def chengowner
     @team = Team.friendly.find(params[:id])
     @team.update(owner_id:params[:format])
+    TeamsChengownerMailer.chengowner_mail(@team).deliver
     redirect_to @team, notice: I18n.t('views.messages.update_team')
   end
 
